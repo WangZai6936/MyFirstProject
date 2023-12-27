@@ -56,13 +56,13 @@ public class ExcelParserService {
             }
         }
         //白班列
-        int dayCellIndex = 0;
+        int dayCellIndex = -1;
         //晚班列
-        int nightCellIndex = 0;
+        int nightCellIndex = -1;
         //白加晚列
-        int allDayCellIndex = 0;
+        int allDayCellIndex = -1;
         //休息列
-        int restCellIndex = 0;
+        int restCellIndex = -1;
         //只统计遍历出的第一个班次
         int dayCount = 0;
         int nightCount = 0;
@@ -91,25 +91,45 @@ public class ExcelParserService {
             }
         }
         //白班单元格
-        Cell dayCell = sheet.getRow(0).getCell(dayCellIndex);
+        Cell dayCell = null;
+        String dayTime = null;
+        String dayWeek = null;
         //晚班单元格
-        Cell nightCell = sheet.getRow(0).getCell(nightCellIndex);
+        Cell nightCell = null;
+        String nightTime = null;
+        String nightWeek = null;
         //白加晚单元格
-        Cell allDayCell = sheet.getRow(0).getCell(allDayCellIndex);
-        //休息单元格
-        Cell restCell = sheet.getRow(0).getCell(restCellIndex);
-        //下次白班日期
-        String dayTime = simpleDateFormat.format(dayCell.getDateCellValue().getTime());
-        String dayWeek = sheet.getRow(1).getCell(dayCellIndex).getStringCellValue();
-        //下次晚班日期
-        String nightTime = simpleDateFormat.format(nightCell.getDateCellValue().getTime());
-        String nightWeek = sheet.getRow(1).getCell(nightCellIndex).getStringCellValue();
-        //下次休息日期
-        String restTime = simpleDateFormat.format(restCell.getDateCellValue().getTime());
-        String restWeek = sheet.getRow(1).getCell(restCellIndex).getStringCellValue();
-        //下次白加晚日期
-//        String allDayTime = simpleDateFormat.format(allDayCell.getDateCellValue().getTime());
-//        String allDayWeek = sheet.getRow(1).getCell(allDayCellIndex).getStringCellValue();
+        Cell allDayCell = null;
+        String allDayTime = null;
+        String allDayWeek = null;
+                //休息单元格
+        Cell restCell = null;
+        String restTime = null;
+        String restWeek = null;
+        if(dayCellIndex != -1){
+            dayCell = sheet.getRow(0).getCell(dayCellIndex);
+            //下次白班日期
+            dayTime = simpleDateFormat.format(dayCell.getDateCellValue().getTime());
+            dayWeek = sheet.getRow(1).getCell(dayCellIndex).getStringCellValue();
+        }
+        if(nightCellIndex != -1){
+            nightCell = sheet.getRow(0).getCell(nightCellIndex);
+            //下次晚班日期
+            nightTime = simpleDateFormat.format(nightCell.getDateCellValue().getTime());
+            nightWeek = sheet.getRow(1).getCell(nightCellIndex).getStringCellValue();
+        }
+        if(allDayCellIndex != -1){
+            allDayCell = sheet.getRow(0).getCell(allDayCellIndex);
+            //下次白加晚日期
+            allDayTime = simpleDateFormat.format(allDayCell.getDateCellValue().getTime());
+            allDayWeek = sheet.getRow(1).getCell(allDayCellIndex).getStringCellValue();
+        }
+        if(restCellIndex != -1){
+            restCell = sheet.getRow(0).getCell(restCellIndex);
+            //下次休息日期
+            restTime = simpleDateFormat.format(restCell.getDateCellValue().getTime());
+            restWeek = sheet.getRow(1).getCell(restCellIndex).getStringCellValue();
+        }
 //        Map<String, Map<String, String>> monthMap = analysisExcelForEveryDay(sheet, rowIndex,servletRequest);
 //        servletRequest.setAttribute("monthMap",monthMap);
         //List<Date> list = new ArrayList<>();
@@ -145,8 +165,8 @@ public class ExcelParserService {
         map.put("dayWeek",dayWeek);
         map.put("nightWeek",nightWeek);
         map.put("restWeek",restWeek);
-//        map.put("allDayWeek",allDayWeek);
-//        map.put("allDayTime",allDayTime);
+        map.put("allDayWeek",allDayWeek);
+        map.put("allDayTime",allDayTime);
         return map;
     }
 
